@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  endpoint-caller:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dotnet-endpoint-caller
+    environment:
+      ENDPOINT_URL: ${ENDPOINT_URL:-https://httpbin.org/delay/1}
+      INTERVAL_SECONDS: ${INTERVAL_SECONDS:-30}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      # Keep app name consistent with Dockerfile
+      NEW_RELIC_APP_NAME: ${NEW_RELIC_APP_NAME}
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
